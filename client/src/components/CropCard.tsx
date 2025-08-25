@@ -41,6 +41,19 @@ interface CropCardProps {
 export default function CropCard({ recommendation }: CropCardProps) {
   const { crop, compatibilityScore } = recommendation;
   
+  // Early return if crop data is not available
+  if (!crop) {
+    return (
+      <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+        <CardContent className="p-6">
+          <div className="text-center">
+            <p className="text-gray-500">Crop data not available</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+  
   // Parse recommendations JSON
   let recommendations: { irrigation?: string; fertilizer?: string; pestControl?: string } = {};
   try {

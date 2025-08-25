@@ -265,13 +265,28 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getUserCropRecommendations(userId: string): Promise<(CropRecommendation & { crop: Crop; state: State; soilType: SoilType })[]> {
-    return await db
+    const results = await db
       .select()
       .from(cropRecommendations)
       .innerJoin(crops, eq(cropRecommendations.cropId, crops.id))
       .innerJoin(states, eq(cropRecommendations.stateId, states.id))
       .innerJoin(soilTypes, eq(cropRecommendations.soilTypeId, soilTypes.id))
       .where(eq(cropRecommendations.userId, userId));
+
+    // Transform the nested structure to the expected flat structure
+    return results.map((result: any) => ({
+      id: result.crop_recommendations.id,
+      userId: result.crop_recommendations.userId,
+      cropId: result.crop_recommendations.cropId,
+      stateId: result.crop_recommendations.stateId,
+      soilTypeId: result.crop_recommendations.soilTypeId,
+      compatibilityScore: result.crop_recommendations.compatibilityScore,
+      recommendations: result.crop_recommendations.recommendations,
+      createdAt: result.crop_recommendations.createdAt,
+      crop: result.crops,
+      state: result.states,
+      soilType: result.soil_types,
+    }));
   }
 
   private getIrrigationAdvice(cropName: string): string {

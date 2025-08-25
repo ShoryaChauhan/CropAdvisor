@@ -25,7 +25,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth routes
   app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.claims.sub.toString();
       const user = await storage.getUser(userId);
       res.json(user);
     } catch (error) {
@@ -60,7 +60,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Update user location
   app.patch('/api/user/location', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.claims.sub.toString();
       const locationData = updateUserLocationSchema.parse(req.body);
       
       const updatedUser = await storage.updateUserLocation(userId, locationData);
@@ -86,7 +86,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Crop recommendations routes
   app.get('/api/crop-recommendations', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.claims.sub.toString();
       const recommendations = await storage.getUserCropRecommendations(userId);
       res.json(recommendations);
     } catch (error) {
@@ -97,7 +97,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/crop-recommendations/generate', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.claims.sub.toString();
       const user = await storage.getUser(userId);
       
       if (!user?.selectedState || !user?.selectedSoilType) {

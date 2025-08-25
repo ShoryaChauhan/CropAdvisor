@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { 
-  User, 
+  User as LucideUser, 
   Leaf, 
   Cloud, 
   TrendingUp, 
@@ -25,6 +25,18 @@ import {
   Eye,
   Sun
 } from "lucide-react";
+
+interface User {
+  id: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  profileImageUrl?: string;
+  selectedState?: string;
+  selectedSoilType?: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 interface CropRecommendation {
   id: string;
@@ -62,6 +74,9 @@ export default function Dashboard() {
   const { toast } = useToast();
   const { user, isAuthenticated, isLoading } = useAuth();
   const queryClient = useQueryClient();
+  
+  // Type the user properly
+  const typedUser = user as User | undefined;
 
   // Redirect to home if not authenticated
   useEffect(() => {
@@ -79,7 +94,7 @@ export default function Dashboard() {
   }, [isAuthenticated, isLoading, toast]);
 
   // Fetch crop recommendations
-  const { data: cropRecommendations = [], isLoading: isLoadingRecommendations } = useQuery({
+  const { data: cropRecommendations = [], isLoading: isLoadingRecommendations } = useQuery<CropRecommendation[]>({
     queryKey: ["/api/crop-recommendations"],
     retry: false,
     enabled: isAuthenticated,
@@ -122,7 +137,7 @@ export default function Dashboard() {
   };
 
   const handleGenerateRecommendations = () => {
-    if (!user?.selectedState || !user?.selectedSoilType) {
+    if (!typedUser?.selectedState || !typedUser?.selectedSoilType) {
       toast({
         title: "Missing Information",
         description: "Please select your state and soil type first",
@@ -173,10 +188,10 @@ export default function Dashboard() {
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <div className="w-8 h-8 bg-farm-green rounded-full flex items-center justify-center">
-                  <User className="text-white text-sm" />
+                  <LucideUser className="text-white text-sm" />
                 </div>
                 <span className="text-sm font-medium text-gray-700">
-                  {user?.firstName || user?.email || 'Farmer'}
+                  {typedUser?.firstName || typedUser?.email || 'Farmer'}
                 </span>
               </div>
               <Button
@@ -200,13 +215,13 @@ export default function Dashboard() {
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
               <div className="mb-4 md:mb-0">
                 <h2 className="text-2xl font-bold mb-2">
-                  Welcome back, {user?.firstName || 'Farmer'}!
+                  Welcome back, {typedUser?.firstName || 'Farmer'}!
                 </h2>
                 <p className="text-green-100">Here's your farming insights for today</p>
-                {user?.selectedState && (
+                {typedUser?.selectedState && (
                   <div className="flex items-center mt-3 text-green-100">
                     <span data-testid="text-user-location">
-                      Location: {user.selectedState}
+                      Location: {typedUser.selectedState}
                     </span>
                   </div>
                 )}
@@ -270,7 +285,7 @@ export default function Dashboard() {
                 </p>
                 <Button 
                   onClick={handleGenerateRecommendations}
-                  disabled={!user?.selectedState || !user?.selectedSoilType}
+                  disabled={!typedUser?.selectedState || !typedUser?.selectedSoilType}
                   className="bg-farm-green text-white hover:bg-green-700"
                   data-testid="button-generate-first-crops"
                 >
