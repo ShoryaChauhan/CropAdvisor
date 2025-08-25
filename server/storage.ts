@@ -55,20 +55,6 @@ export class DatabaseStorage implements IStorage {
   // User operations
   async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
-    if (!user) return user;
-
-    // If user has a selected state, get the state name
-    if (user.selectedState) {
-      const [state] = await db.select().from(states).where(eq(states.id, user.selectedState));
-      if (state) {
-        // Return user data with readable state name instead of ID
-        return {
-          ...user,
-          selectedState: state.name,
-        };
-      }
-    }
-
     return user;
   }
 

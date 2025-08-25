@@ -233,10 +233,10 @@ export default function Dashboard() {
                   Welcome back, {typedUser?.firstName || 'Farmer'}!
                 </h2>
                 <p className="text-green-100">Here's your farming insights for today</p>
-                {typedUser?.selectedState && (
+                {(((user as any)?.selectedStateName) || typedUser?.selectedState) && (
                   <div className="flex items-center mt-3 text-green-100">
                     <span data-testid="text-user-location">
-                      Location: {typedUser.selectedState}
+                      Location: {((user as any)?.selectedStateName) || typedUser?.selectedState}
                     </span>
                   </div>
                 )}

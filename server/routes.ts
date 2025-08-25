@@ -27,7 +27,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub.toString();
       const user = await storage.getUser(userId);
-      res.json(user);
+      
+      if (user && user.selectedState) {
+        // Get the state name for display purposes
+        const allStates = await storage.getAllStates();
+        const state = allStates.find(s => s.id === user.selectedState);
+        
+        res.json({
+          ...user,
+          selectedStateName: state?.name || user.selectedState, // Add readable state name for frontend display
+        });
+      } else {
+        res.json(user);
+      }
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Failed to fetch user" });
@@ -118,9 +130,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Weather routes
-  app.get('/api/weather/:stateId', async (req, res) => {
+  app.get('/api/weather/:stateIdentifier', async (req, res) => {
     try {
-      const { stateId } = req.params;
+      const { stateIdentifier } = req.params;
+      
+      // Check if stateIdentifier is a state ID or state name
+      let stateId = stateIdentifier;
+      
+      // If it looks like a name (not a UUID), find the state ID
+      if (!stateIdentifier.includes('-')) {
+        const allStates = await storage.getAllStates();
+        const state = allStates.find(s => s.name === stateIdentifier);
+        if (!state) {
+          return res.status(404).json({ message: "State not found" });
+        }
+        stateId = state.id;
+      }
+      
       let weather = await storage.getWeatherByState(stateId);
       
       // If no weather data exists or it's older than 1 hour, fetch fresh data
