@@ -101,20 +101,52 @@ export class DatabaseStorage implements IStorage {
     if (existingStates.length > 0) return;
 
     const indianStates: InsertState[] = [
+      // North India
       { name: "Punjab", code: "PB" },
       { name: "Haryana", code: "HR" },
+      { name: "Himachal Pradesh", code: "HP" },
+      { name: "Uttarakhand", code: "UT" },
       { name: "Uttar Pradesh", code: "UP" },
+      { name: "Delhi", code: "DL" },
+      
+      // West India
       { name: "Rajasthan", code: "RJ" },
-      { name: "Madhya Pradesh", code: "MP" },
-      { name: "Maharashtra", code: "MH" },
       { name: "Gujarat", code: "GJ" },
+      { name: "Maharashtra", code: "MH" },
+      { name: "Goa", code: "GA" },
+      
+      // Central India
+      { name: "Madhya Pradesh", code: "MP" },
+      { name: "Chhattisgarh", code: "CG" },
+      
+      // East India
+      { name: "West Bengal", code: "WB" },
+      { name: "Bihar", code: "BR" },
+      { name: "Jharkhand", code: "JH" },
+      { name: "Odisha", code: "OR" },
+      
+      // Northeast India
+      { name: "Assam", code: "AS" },
+      { name: "Meghalaya", code: "ML" },
+      { name: "Manipur", code: "MN" },
+      { name: "Tripura", code: "TR" },
+      { name: "Nagaland", code: "NL" },
+      { name: "Mizoram", code: "MZ" },
+      { name: "Arunachal Pradesh", code: "AR" },
+      { name: "Sikkim", code: "SK" },
+      
+      // South India
       { name: "Karnataka", code: "KA" },
       { name: "Tamil Nadu", code: "TN" },
       { name: "Andhra Pradesh", code: "AP" },
       { name: "Telangana", code: "TG" },
-      { name: "West Bengal", code: "WB" },
-      { name: "Bihar", code: "BR" },
-      { name: "Odisha", code: "OR" },
+      { name: "Kerala", code: "KL" },
+      
+      // Union Territories
+      { name: "Jammu & Kashmir", code: "JK" },
+      { name: "Ladakh", code: "LA" },
+      { name: "Chandigarh", code: "CH" },
+      { name: "Puducherry", code: "PY" },
     ];
 
     await db.insert(states).values(indianStates);
@@ -142,31 +174,239 @@ export class DatabaseStorage implements IStorage {
 
   private getSoilTypesForState(stateCode: string) {
     const soilMapping: Record<string, any[]> = {
+      // North India
       PB: [
         { name: "Alluvial Soil", description: "Fertile soil rich in potash, phosphoric acid, and lime", phRange: "6.5-7.5", characteristics: "High fertility, good water retention" },
         { name: "Sandy Loam", description: "Well-drained soil with good aeration", phRange: "6.0-7.0", characteristics: "Good drainage, moderate fertility" },
+        { name: "Clay Loam", description: "Rich in nutrients with good structure", phRange: "6.5-7.0", characteristics: "Excellent for wheat and rice" },
+        { name: "Saline Soil", description: "High salt content soil in some areas", phRange: "8.0-8.5", characteristics: "Requires salt management" },
       ],
       HR: [
         { name: "Alluvial Soil", description: "Rich in nutrients, suitable for wheat and rice", phRange: "6.5-7.5", characteristics: "High fertility, good water retention" },
         { name: "Sandy Soil", description: "Light textured soil with good drainage", phRange: "6.0-7.0", characteristics: "Quick drainage, low water retention" },
+        { name: "Clay Soil", description: "Heavy soil with high water retention", phRange: "7.0-7.5", characteristics: "Good for paddy cultivation" },
+        { name: "Loamy Soil", description: "Balanced mixture of sand, silt, and clay", phRange: "6.5-7.0", characteristics: "Ideal for most crops" },
+      ],
+      HP: [
+        { name: "Mountain Soil", description: "Forest and hill soils with organic matter", phRange: "5.5-6.5", characteristics: "Rich in humus, acidic" },
+        { name: "Alluvial Soil", description: "Valley soil suitable for agriculture", phRange: "6.5-7.0", characteristics: "Fertile valley soil" },
+        { name: "Brown Hill Soil", description: "Weathered soil on slopes", phRange: "6.0-6.8", characteristics: "Moderate fertility" },
+        { name: "Forest Soil", description: "Rich organic soil under forests", phRange: "5.0-6.0", characteristics: "High organic content" },
+      ],
+      UT: [
+        { name: "Mountain Soil", description: "High altitude soil with good drainage", phRange: "5.5-6.5", characteristics: "Cold climate adaptation" },
+        { name: "Forest Soil", description: "Rich in organic matter from leaf litter", phRange: "5.0-6.0", characteristics: "High humus content" },
+        { name: "Alluvial Soil", description: "River valley soil", phRange: "6.5-7.0", characteristics: "Good for terrace farming" },
+        { name: "Brown Soil", description: "Hill slope soil", phRange: "6.0-6.8", characteristics: "Moderate fertility" },
       ],
       UP: [
         { name: "Alluvial Soil", description: "Most fertile soil in the Gangetic plains", phRange: "6.5-7.5", characteristics: "Very high fertility, excellent for crops" },
         { name: "Black Cotton Soil", description: "Rich in iron, lime, and alumina", phRange: "7.5-8.5", characteristics: "High water retention, suitable for cotton" },
+        { name: "Sandy Loam", description: "Mixed soil with good drainage", phRange: "6.0-7.0", characteristics: "Versatile for multiple crops" },
+        { name: "Clay Soil", description: "Heavy soil in certain regions", phRange: "7.0-7.8", characteristics: "Excellent water retention" },
+        { name: "Saline Alkali Soil", description: "Problem soil requiring management", phRange: "8.5-9.5", characteristics: "High pH, needs reclamation" },
       ],
+      DL: [
+        { name: "Alluvial Soil", description: "Yamuna river basin soil", phRange: "6.5-7.5", characteristics: "Urban agriculture suitable" },
+        { name: "Sandy Loam", description: "Well-drained urban soil", phRange: "6.0-7.0", characteristics: "Good for vegetables" },
+        { name: "Clay Loam", description: "Fertile soil for intensive farming", phRange: "6.8-7.2", characteristics: "High productivity potential" },
+      ],
+
+      // West India
       RJ: [
         { name: "Desert Soil", description: "Arid soil with low organic content", phRange: "7.0-8.5", characteristics: "Low fertility, requires irrigation" },
         { name: "Alluvial Soil", description: "Found in eastern parts of Rajasthan", phRange: "6.5-7.5", characteristics: "Moderate fertility, good for irrigation farming" },
+        { name: "Red Soil", description: "Iron-rich soil in southeastern regions", phRange: "5.5-6.5", characteristics: "Suitable for millets and pulses" },
+        { name: "Saline Soil", description: "Salt-affected soil in western regions", phRange: "8.0-9.0", characteristics: "Requires salt management" },
+        { name: "Sandy Soil", description: "Predominant in Thar desert", phRange: "7.5-8.0", characteristics: "Low water retention" },
       ],
+      GJ: [
+        { name: "Black Cotton Soil", description: "Regur soil, excellent for cotton", phRange: "7.5-8.5", characteristics: "High water retention, very fertile" },
+        { name: "Alluvial Soil", description: "River valley soil", phRange: "6.5-7.5", characteristics: "Good for multiple crops" },
+        { name: "Sandy Soil", description: "Coastal and inland sandy areas", phRange: "6.0-7.0", characteristics: "Good drainage, light texture" },
+        { name: "Saline Soil", description: "Coastal saline areas", phRange: "8.0-8.5", characteristics: "Salt-affected, needs management" },
+        { name: "Red Soil", description: "Hilly regions soil", phRange: "5.5-6.5", characteristics: "Moderate fertility" },
+      ],
+      MH: [
+        { name: "Black Cotton Soil", description: "Most fertile regur soil", phRange: "7.5-8.5", characteristics: "Excellent for cotton, sugarcane" },
+        { name: "Red Soil", description: "Deccan plateau soil", phRange: "5.5-6.5", characteristics: "Good for millets, pulses" },
+        { name: "Alluvial Soil", description: "River valley soil", phRange: "6.5-7.5", characteristics: "High fertility" },
+        { name: "Laterite Soil", description: "Western Ghats soil", phRange: "5.0-6.0", characteristics: "Iron and aluminum rich" },
+        { name: "Sandy Loam", description: "Coastal plain soil", phRange: "6.0-7.0", characteristics: "Good for vegetables" },
+      ],
+      GA: [
+        { name: "Laterite Soil", description: "Predominant soil type", phRange: "5.0-6.0", characteristics: "Iron-rich, acidic" },
+        { name: "Alluvial Soil", description: "River valley soil", phRange: "6.5-7.0", characteristics: "Fertile for rice cultivation" },
+        { name: "Red Soil", description: "Hilly region soil", phRange: "5.5-6.5", characteristics: "Moderate fertility" },
+        { name: "Coastal Sandy Soil", description: "Beach and coastal areas", phRange: "6.5-7.5", characteristics: "Good drainage, coconut suitable" },
+      ],
+
+      // Central India
       MP: [
         { name: "Black Cotton Soil", description: "Regur soil, rich in iron and alumina", phRange: "7.5-8.5", characteristics: "High water retention, fertile" },
         { name: "Red and Yellow Soil", description: "Formed by weathering of crystalline rocks", phRange: "5.5-6.5", characteristics: "Moderate fertility, good for pulses" },
+        { name: "Alluvial Soil", description: "River valley soil", phRange: "6.5-7.5", characteristics: "Very fertile" },
+        { name: "Mixed Red and Black Soil", description: "Transitional soil type", phRange: "6.0-7.0", characteristics: "Versatile for crops" },
+        { name: "Laterite Soil", description: "Plateau region soil", phRange: "5.0-6.0", characteristics: "Iron-rich, needs fertilizers" },
+      ],
+      CG: [
+        { name: "Red and Yellow Soil", description: "Predominant soil in the state", phRange: "5.5-6.5", characteristics: "Good for rice and pulses" },
+        { name: "Alluvial Soil", description: "River plains soil", phRange: "6.5-7.5", characteristics: "High fertility" },
+        { name: "Black Soil", description: "Central and southern regions", phRange: "7.0-8.0", characteristics: "Good water retention" },
+        { name: "Laterite Soil", description: "Plateau areas", phRange: "5.0-6.0", characteristics: "Iron-rich, acidic" },
+        { name: "Forest Soil", description: "Dense forest areas", phRange: "5.5-6.0", characteristics: "Rich in organic matter" },
+      ],
+
+      // East India
+      WB: [
+        { name: "Alluvial Soil", description: "Gangetic plains soil", phRange: "6.5-7.5", characteristics: "Very fertile, excellent for rice" },
+        { name: "Red Laterite Soil", description: "Western plateau soil", phRange: "5.0-6.0", characteristics: "Iron-rich, acidic" },
+        { name: "Terai Soil", description: "Foothills soil", phRange: "6.0-6.8", characteristics: "Good for tea cultivation" },
+        { name: "Coastal Alluvium", description: "Sundarbans region", phRange: "6.8-7.2", characteristics: "Saline influence" },
+        { name: "Hill Soil", description: "Darjeeling hills", phRange: "5.5-6.5", characteristics: "Ideal for tea and fruits" },
+      ],
+      BR: [
+        { name: "Alluvial Soil", description: "Gangetic plains fertile soil", phRange: "6.5-7.5", characteristics: "Extremely fertile" },
+        { name: "Newer Alluvium", description: "Recent river deposits", phRange: "6.8-7.2", characteristics: "Very high fertility" },
+        { name: "Older Alluvium", description: "Elevated areas", phRange: "6.5-7.0", characteristics: "Good fertility" },
+        { name: "Terai Soil", description: "Northern foothills", phRange: "6.0-6.8", characteristics: "Forest transition soil" },
+      ],
+      JH: [
+        { name: "Red Soil", description: "Chota Nagpur plateau soil", phRange: "5.5-6.5", characteristics: "Iron-rich, moderate fertility" },
+        { name: "Laterite Soil", description: "Plateau region", phRange: "5.0-6.0", characteristics: "Iron and aluminum rich" },
+        { name: "Alluvial Soil", description: "River valleys", phRange: "6.5-7.5", characteristics: "Fertile valley soil" },
+        { name: "Forest Soil", description: "Dense forest areas", phRange: "5.5-6.0", characteristics: "Rich organic content" },
+        { name: "Sandy Loam", description: "Undulating areas", phRange: "6.0-6.8", characteristics: "Moderate drainage" },
+      ],
+      OR: [
+        { name: "Red Soil", description: "Predominant soil type", phRange: "5.5-6.5", characteristics: "Iron-rich, good for millets" },
+        { name: "Alluvial Soil", description: "Coastal and river plains", phRange: "6.5-7.5", characteristics: "Very fertile" },
+        { name: "Laterite Soil", description: "Eastern Ghats region", phRange: "5.0-6.0", characteristics: "Iron-rich, acidic" },
+        { name: "Black Soil", description: "Western regions", phRange: "7.0-8.0", characteristics: "Good water retention" },
+        { name: "Coastal Sandy Soil", description: "Coastal areas", phRange: "6.8-7.5", characteristics: "Good for coconut" },
+      ],
+
+      // Northeast India
+      AS: [
+        { name: "Alluvial Soil", description: "Brahmaputra valley soil", phRange: "6.0-7.0", characteristics: "Very fertile for rice" },
+        { name: "Hill Soil", description: "Assam hills", phRange: "5.5-6.5", characteristics: "Good for tea cultivation" },
+        { name: "Red Loamy Soil", description: "Upper Assam", phRange: "5.8-6.8", characteristics: "Moderate fertility" },
+        { name: "Laterite Soil", description: "Plateau areas", phRange: "5.0-6.0", characteristics: "Iron-rich" },
+        { name: "Terai Soil", description: "Foothills region", phRange: "6.0-6.8", characteristics: "Forest soil" },
+      ],
+      ML: [
+        { name: "Red Soil", description: "Khasi and Jaintia hills", phRange: "5.5-6.5", characteristics: "Acidic, needs lime" },
+        { name: "Laterite Soil", description: "Plateau regions", phRange: "5.0-6.0", characteristics: "Iron-rich, low fertility" },
+        { name: "Forest Soil", description: "Dense forest areas", phRange: "5.0-5.8", characteristics: "High organic matter" },
+        { name: "Alluvial Soil", description: "Valley areas", phRange: "6.0-6.8", characteristics: "Moderate fertility" },
+      ],
+      MN: [
+        { name: "Red Soil", description: "Hill soil", phRange: "5.5-6.5", characteristics: "Moderate fertility" },
+        { name: "Alluvial Soil", description: "Valley soil", phRange: "6.0-7.0", characteristics: "Good for rice" },
+        { name: "Forest Soil", description: "Forest areas", phRange: "5.0-6.0", characteristics: "Rich organic content" },
+        { name: "Hill Slope Soil", description: "Steep slopes", phRange: "5.5-6.8", characteristics: "Erosion prone" },
+      ],
+      TR: [
+        { name: "Red and Yellow Soil", description: "Hill and valley soil", phRange: "5.5-6.5", characteristics: "Moderate fertility" },
+        { name: "Alluvial Soil", description: "River valleys", phRange: "6.0-7.0", characteristics: "Good for agriculture" },
+        { name: "Forest Soil", description: "Forest covered areas", phRange: "5.0-6.0", characteristics: "High humus" },
+        { name: "Laterite Soil", description: "Plateau areas", phRange: "5.0-5.8", characteristics: "Iron-rich" },
+      ],
+      NL: [
+        { name: "Forest Soil", description: "Dense forest soil", phRange: "5.0-6.0", characteristics: "Very rich in organic matter" },
+        { name: "Red Soil", description: "Hill slopes", phRange: "5.5-6.5", characteristics: "Acidic nature" },
+        { name: "Alluvial Soil", description: "Valley areas", phRange: "6.0-6.8", characteristics: "Moderate fertility" },
+        { name: "Mountain Soil", description: "High altitude areas", phRange: "5.0-5.8", characteristics: "Cold climate soil" },
+      ],
+      MZ: [
+        { name: "Red Soil", description: "Hill and slope soil", phRange: "5.5-6.5", characteristics: "Moderate to low fertility" },
+        { name: "Forest Soil", description: "Forest areas", phRange: "5.0-6.0", characteristics: "Rich in organic matter" },
+        { name: "Alluvial Soil", description: "River valleys", phRange: "6.0-6.8", characteristics: "Good for rice" },
+        { name: "Mountain Soil", description: "High hills", phRange: "5.0-5.8", characteristics: "Steep slope soil" },
+      ],
+      AR: [
+        { name: "Mountain Soil", description: "High altitude soil", phRange: "5.0-6.0", characteristics: "Cold climate adaptation" },
+        { name: "Forest Soil", description: "Dense forest cover", phRange: "5.0-5.8", characteristics: "Very rich humus" },
+        { name: "Red Soil", description: "Hill slopes", phRange: "5.5-6.5", characteristics: "Moderate fertility" },
+        { name: "Alluvial Soil", description: "Valley floors", phRange: "6.0-6.8", characteristics: "Limited agriculture" },
+      ],
+      SK: [
+        { name: "Mountain Soil", description: "High altitude Himalayan soil", phRange: "5.0-6.0", characteristics: "Cold climate, organic rich" },
+        { name: "Forest Soil", description: "Dense forest areas", phRange: "5.0-5.8", characteristics: "High organic content" },
+        { name: "Alpine Soil", description: "High altitude meadows", phRange: "5.5-6.5", characteristics: "Short growing season" },
+        { name: "Alluvial Soil", description: "Teesta valley", phRange: "6.0-6.8", characteristics: "Terrace farming suitable" },
+      ],
+
+      // South India
+      KA: [
+        { name: "Red Soil", description: "Predominant soil of Karnataka", phRange: "5.5-6.5", characteristics: "Iron-rich, good for millets" },
+        { name: "Black Soil", description: "Northern Karnataka", phRange: "7.5-8.5", characteristics: "Excellent for cotton" },
+        { name: "Laterite Soil", description: "Western Ghats region", phRange: "5.0-6.0", characteristics: "Iron and aluminum rich" },
+        { name: "Alluvial Soil", description: "River valleys", phRange: "6.5-7.5", characteristics: "Very fertile" },
+        { name: "Coastal Sandy Soil", description: "Coastal Karnataka", phRange: "6.5-7.5", characteristics: "Good for coconut" },
+        { name: "Forest Soil", description: "Western Ghats forests", phRange: "5.0-6.0", characteristics: "Rich organic matter" },
+      ],
+      TN: [
+        { name: "Red Soil", description: "Most common soil type", phRange: "5.5-6.5", characteristics: "Good for millets, groundnut" },
+        { name: "Black Soil", description: "Southern and western regions", phRange: "7.5-8.5", characteristics: "Excellent for cotton" },
+        { name: "Alluvial Soil", description: "River deltas and valleys", phRange: "6.5-7.5", characteristics: "Very fertile for rice" },
+        { name: "Laterite Soil", description: "Western Ghats", phRange: "5.0-6.0", characteristics: "Iron-rich, acidic" },
+        { name: "Coastal Sandy Soil", description: "Coastal plains", phRange: "6.8-7.5", characteristics: "Good for coconut, cashew" },
+        { name: "Saline Soil", description: "Coastal saline areas", phRange: "8.0-8.5", characteristics: "Salt-affected" },
+      ],
+      AP: [
+        { name: "Red Soil", description: "Predominant in most regions", phRange: "5.5-6.5", characteristics: "Iron-rich, moderate fertility" },
+        { name: "Black Soil", description: "Western and central regions", phRange: "7.5-8.5", characteristics: "Excellent for cotton" },
+        { name: "Alluvial Soil", description: "River deltas", phRange: "6.5-7.5", characteristics: "Very fertile for rice" },
+        { name: "Laterite Soil", description: "Eastern Ghats", phRange: "5.0-6.0", characteristics: "Iron-rich" },
+        { name: "Coastal Sandy Soil", description: "Coastal areas", phRange: "6.8-7.5", characteristics: "Good for coconut" },
+      ],
+      TG: [
+        { name: "Red Soil", description: "Major soil type", phRange: "5.5-6.5", characteristics: "Iron-rich, good for cotton" },
+        { name: "Black Soil", description: "Central and western regions", phRange: "7.5-8.5", characteristics: "Excellent water retention" },
+        { name: "Alluvial Soil", description: "River valleys", phRange: "6.5-7.5", characteristics: "High fertility" },
+        { name: "Mixed Red and Black Soil", description: "Transitional areas", phRange: "6.0-7.0", characteristics: "Moderate fertility" },
+      ],
+      KL: [
+        { name: "Laterite Soil", description: "Predominant soil type", phRange: "5.0-6.0", characteristics: "Iron-rich, acidic, good for coconut" },
+        { name: "Alluvial Soil", description: "River valleys and deltas", phRange: "6.0-7.0", characteristics: "Very fertile for rice" },
+        { name: "Red Soil", description: "Eastern regions", phRange: "5.5-6.5", characteristics: "Moderate fertility" },
+        { name: "Coastal Sandy Soil", description: "Coastal belt", phRange: "6.5-7.5", characteristics: "Excellent for coconut" },
+        { name: "Forest Soil", description: "Western Ghats", phRange: "5.0-6.0", characteristics: "Rich in organic matter" },
+        { name: "Hill Soil", description: "High ranges", phRange: "5.5-6.5", characteristics: "Good for spices, tea" },
+      ],
+
+      // Union Territories
+      JK: [
+        { name: "Mountain Soil", description: "High altitude Himalayan soil", phRange: "5.5-6.5", characteristics: "Cold climate, organic matter rich" },
+        { name: "Alluvial Soil", description: "Kashmir valley", phRange: "6.5-7.5", characteristics: "Very fertile for rice, saffron" },
+        { name: "Forest Soil", description: "Forest covered areas", phRange: "5.0-6.0", characteristics: "Rich humus content" },
+        { name: "Alpine Soil", description: "High altitude meadows", phRange: "5.5-6.8", characteristics: "Short growing season" },
+        { name: "Glacial Soil", description: "Glacial deposits", phRange: "6.0-6.8", characteristics: "Rocky, mineral rich" },
+      ],
+      LA: [
+        { name: "Cold Desert Soil", description: "High altitude desert soil", phRange: "7.0-8.0", characteristics: "Arid, low organic matter" },
+        { name: "Mountain Soil", description: "Rocky mountain soil", phRange: "6.0-7.0", characteristics: "Limited agriculture potential" },
+        { name: "Glacial Soil", description: "Glacial valley soil", phRange: "6.5-7.5", characteristics: "Mineral rich" },
+        { name: "Alpine Soil", description: "High altitude soil", phRange: "6.0-6.8", characteristics: "Extreme climate adaptation" },
+      ],
+      CH: [
+        { name: "Alluvial Soil", description: "Indo-Gangetic plain soil", phRange: "6.5-7.5", characteristics: "High fertility" },
+        { name: "Sandy Loam", description: "Well-drained soil", phRange: "6.0-7.0", characteristics: "Good for vegetables" },
+        { name: "Clay Loam", description: "Heavy soil with nutrients", phRange: "6.8-7.2", characteristics: "Good water retention" },
+      ],
+      PY: [
+        { name: "Red Soil", description: "Terra rossa soil", phRange: "5.5-6.5", characteristics: "Iron-rich, moderate fertility" },
+        { name: "Alluvial Soil", description: "River and coastal plains", phRange: "6.5-7.5", characteristics: "Very fertile" },
+        { name: "Coastal Sandy Soil", description: "Beach and coastal areas", phRange: "6.8-7.5", characteristics: "Good for coconut" },
+        { name: "Black Soil", description: "Interior regions", phRange: "7.0-8.0", characteristics: "Good water retention" },
       ],
     };
 
     return soilMapping[stateCode] || [
       { name: "Alluvial Soil", description: "General fertile soil", phRange: "6.5-7.5", characteristics: "Good fertility" },
       { name: "Red Soil", description: "Common in many regions", phRange: "5.5-6.5", characteristics: "Moderate fertility" },
+      { name: "Black Soil", description: "Clay-rich soil", phRange: "7.0-8.0", characteristics: "High water retention" },
     ];
   }
 
