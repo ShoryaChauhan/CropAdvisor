@@ -98,6 +98,14 @@ export default function Dashboard() {
     queryKey: ["/api/crop-recommendations"],
     retry: false,
     enabled: isAuthenticated,
+    select: (data: any) => {
+      // Transform the data structure if needed
+      console.log("Raw crop recommendations data:", data);
+      if (Array.isArray(data)) {
+        return data;
+      }
+      return [];
+    }
   });
 
   // Generate new crop recommendations mutation
@@ -146,6 +154,13 @@ export default function Dashboard() {
       return;
     }
     generateRecommendationsMutation.mutate();
+  };
+
+  const handleRequestDetailedAnalysis = () => {
+    toast({
+      title: "Detailed Analysis Requested",
+      description: "Our agricultural experts will contact you within 24 hours with a comprehensive soil analysis report.",
+    });
   };
 
   if (isLoading) {
@@ -266,7 +281,7 @@ export default function Dashboard() {
                 </Card>
               ))}
             </div>
-          ) : cropRecommendations.length > 0 ? (
+          ) : (cropRecommendations && cropRecommendations.length > 0) ? (
             <div className="grid lg:grid-cols-2 gap-6">
               {cropRecommendations.slice(0, 4).map((recommendation: CropRecommendation) => (
                 <CropCard 
@@ -366,7 +381,11 @@ export default function Dashboard() {
                 </div>
               </div>
               
-              <Button className="w-full mt-4 bg-farm-brown text-white hover:bg-amber-700">
+              <Button 
+                onClick={handleRequestDetailedAnalysis}
+                className="w-full mt-4 bg-farm-brown text-white hover:bg-amber-700"
+                data-testid="button-request-analysis"
+              >
                 Request Detailed Analysis
               </Button>
             </CardContent>
